@@ -5,5 +5,9 @@
 
   "devtools_page": "/devtools.html",
 
+  "permissions": [
+    "contentSettings"
+  ],
+
   "content_security_policy": "script-src 'self' https://google.com; object-src 'self';"
 }

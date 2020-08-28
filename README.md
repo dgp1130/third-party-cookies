@@ -39,3 +39,42 @@ There is basically no difference between the DevTools panel and directly using
 `chrome-extension://${extensionId}/panel.html` when third-party cookies are
 allowed. However, when third-party cookies are blocked, the DevTools panel and
 `.../panel.html` send different cookies. This may be a bug in Chrome?
+
+## contentSettings
+
+One notable implementation different between using the Chrome DevTools panel
+and using `.../panel.html` directly is that Chrome DevTools panels load the
+`.../panel.html` page via an iframe. The top-level domain is actually
+`devtools://devtools`, which you can observe by inspecting the DevTools panel,
+opening the console, switching to the top frame, and then running:
+
+```javascript
+window.location.href
+// devtools://devtools/...
+```
+
+This extension also enables the `contentSettings` API. When inspecting a page,
+you can use `chrome.contentSettings.cookies` to inspect cookie state of various
+URLs. Most notably:
+
+```javascript
+chrome.contentSettings.cookies.get({
+  primaryUrl: 'https://*.google.com',
+  secondaryUrl: 'chrome-extension://${extensionId}',
+}, console.log);
+// Prints: `{ setting: 'allow' }` (regardless of third-party cookie setting).
+```
+
+However, if you try:
+
+```javascript
+chrome.contentSettings.cookies.get({
+  primaryUrl: 'https://*.google.com',
+  secondaryUrl: 'devtools://devtools',
+}, console.log);
+// Prints `{ setting: 'allow' }` when third-party cookies are enabled.
+// Prints `{ setting: 'deny' }` when third-party cookies are disabled.
+```
+
+It seems that changing the third-party cookies setting may affect Chrome
+DevTools panels in a way that does not affect normal Chrome extension pages.
