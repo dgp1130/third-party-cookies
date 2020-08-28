@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Third-Party Cookies on DevTools</title>
+  </head>
+  <body>
+    <h2>Steps to reproduce.</h2>
+    <ol>
+      <li>
+        Disable third-party cookies in <a href="chrome://settings/cookies">
+        chrome://settings/cookies</a> (or disable just for incognito windows and
+        enable and use this extension while incognito).
+      </li>
+      <li>Inspect this panel and switch to the Network tab.</li>
+      <li>Enter a URL in the below box which you have cookies for.</li>
+      <li>Hit send to make a simple GET request at the URL.</li>
+      <li>
+        Check the Network panel you opened previously, find the request, and
+        look under the "Cookies" tab. Look at each cookie sent and blocked.
+      </li>
+    </ol>
+
+    <input type="text" value="https://google.com/" />
+    <button>Send</button>
+
+    <script src="/panel.js"></script>
+  </body>
+</html>
